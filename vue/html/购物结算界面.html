@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <h1>水果</h1>
+        <div>
+             <table border="1">
+                 <thead>
+                    <tr>
+                        <th>选中</th>
+                        <th>图片</th>
+                        <th>单价</th>
+                        <th>个数</th>
+                        <th>小计</th>
+                        <th>操作</th>
+                    </tr>
+                 </thead>
+                 <tbody v-if="list.length!=0">
+                    <tr v-for="(item,index) in list" :key="item.id">
+                        <td><input type="checkbox" v-model="item.ischeck"></td>
+                        <td><img :src="item.src" style="height: 100px;width: 100px;"></td>
+                        <td>{{item.price}}</td>
+                        <td>
+                            <button @click="item.num--" v-show="item.num>0">-</button>
+                            {{item.num}}
+                            <button @click="item.num++">+</button>
+                        </td>
+                        <td>{{item.price*item.num}}</td>
+                        <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+                    </tr>
+                 </tbody>
+                 <tbody v-else>
+                    <tr>
+                        <td colspan="6" style="text-align: center;">无任何商品</td>
+                    </tr>
+                 </tbody>
+                 <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <span>全选：<input type="checkbox" v-model="selectAll"></span>
+                            <span style="margin-left: 130px;">总价：{{total}}￥</span>
+                            <button>结算{{Sum}}</button>
+                        </td>
+                    </tr>
+                 </tfoot>
+             </table>
+        </div>
+    </div>
+
+    <script>
+        const app = new Vue({
+            el:"#app",
+            data: {
+                list: [
+                    {id:1,ischeck:false,src:"C:/Users/PC/Desktop/笔记/vue/图片/草莓.png",price:6,num:1},
+                    {id:2,ischeck:false,src:"C:/Users/PC/Desktop/笔记/vue/图片/火龙果.png",price:7,num:1}
+                ]
+             },
+             methods: {
+                del(id) {
+                    this.list = this.list.filter((list)=>list.id!=id)
+                 }
+                },
+                computed: {
+                    selectAll: {
+                        get() {
+                            if (this.list.length > 0) {
+                                return this.list.every(item => item.ischeck);
+                            }
+                        },
+                        set(value) {
+                            for (let item of this.list) {
+                                item.ischeck = value;
+                            }
+                        }
+                    },
+                    total(){
+                        let sum=0;
+                        for (let item of this.list) {
+                            if(item.ischeck==true)
+                            {
+                                sum += item.num*item.price;
+                            }
+                         }
+                         return sum;
+                     },
+                     Sum() {
+                        let sum=0;
+                        for (let item of this.list) {
+                            if(item.ischeck==true)
+                            {
+                                sum += item.num;
+                            }
+                         }
+                         return sum;
+                      }
+                }
+         })
+    </script>
+</body>
+</html>
+
+
