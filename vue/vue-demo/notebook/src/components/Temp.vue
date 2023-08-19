@@ -1,18 +1,18 @@
 <template>
-  <div>
+  <div class="progress">
     <button @click="count--">-</button>
-    <span>{{ count }}</span>
+    {{ count }}
     <button @click="count++">+</button>
   </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            count:0
-         }
+  props:{
+    count:{
+      type:Number
     }
+  }
 }
 </script>
 
